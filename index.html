@@ -6,7 +6,21 @@
     <link rel="stylesheet" href="styles.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
-
+    <section class="visible" id="loginPage">
+      <form id="usernameInput" action="index.html" method="post">
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+        <input type="text" name="username" placeholder="enter your username"value="">
+      </form>
+    </section>
+    <section id="chatPage">
+      <h2 id="welcomeMsg">hollaback, user</h2>
+      <ul>
+        <!-- chat posts go here -->
+      </ul>
+      <form id="newPostInput" action="index.html" method="post">
+        <input type="text" name="newPost" placeholder="enter your chat text"value="">
+      </form>
+    </section>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="main.js"></script>

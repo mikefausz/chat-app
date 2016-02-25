@@ -1,2 +1,11 @@
 body {
   background-color: red; }
+
+section {
+  display: none; }
+
+.visible {
+  display: block; }
+
+h3, p {
+  display: inline-block; }
