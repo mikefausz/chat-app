@@ -1,6 +1,7 @@
 $(document).ready(function() {
   chatList.init();
-  // chatList.deletePost("");
+  chatList.deletePost("56cf6cc20e33ef0300d98f02");
+  chatList.deletePost("56cf6ca40e33ef0300d98f01");
 });
 
 var templates = {
@@ -15,7 +16,7 @@ var templates = {
 
 var chatList = {
   url: 'http://tiny-tiny.herokuapp.com/collections/hollabak',
-  userList: [],
+  userListUrl: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
 
   init: function() {
     chatList.events();
@@ -30,12 +31,12 @@ var chatList = {
     chatList.updatePosts();
     $('#usernameInput').on('submit', function(event) {
       event.preventDefault();
-      var username = chatList.getUsername();
+      var newUser = chatList.createNewLogin(chatList.getUsername());
       chatList.setWelcomeMsg();
       $parentSection = $(this).parent('section');
       $parentSection.removeClass('visible');
       $parentSection.next('section').addClass('visible');
-      chatList.addUserToList(username);
+      chatList.addUserToList(newUser);
     });
 
     $('#newPostInput').on('submit', function(event) {
@@ -55,6 +56,15 @@ var chatList = {
     });
   },
 
+  createNewLogin: function(username) {
+    var loginTime = new Date();
+    var loginString = loginTime.toLocaleTimeString();
+    return {
+      username: username,
+      login_time: loginString,
+    };
+  },
+
   getUsername: function() {
     var username = $('input[name="username"]').val();
     $('input[name="newTodo"]').val("");
@@ -62,38 +72,47 @@ var chatList = {
     return username;
   },
 
-  // addUserListToServer: function() {
-  //   $.ajax({
-  //     url: chatList.url,
-  //     method: 'POST',
-  //     data: chatList.userList,
-  //     success: function(response) {
-  //       console.log(chatList.userList);
-  //     },
-  //   });
-  // },
-
-  updateUserList: function() {
+  addUserToList: function(user) {
     $.ajax({
-      url: chatList.url,
-      method: 'PUT',
-      data: chatList.userList,
+      url: chatList.userListUrl,
+      method: 'POST',
+      data: user,
       success: function(response) {
         console.log(chatList.userList);
       },
     });
   },
 
-  addUserToList: function(username) {
-    chatList.userList.push(username);
+  removeUserFromList: function(userId) {
+    $.ajax({
+      url: chatList.userListUrl + '/' + userId,
+      method: 'DELETE',
+      success: function(response) {
+        console.log("success");
+      },
+    });
   },
 
   removeUserFromList: function(username) {
 
   },
 
+  getUsersFromServer: function() {
+    $.ajax({
+      url: chatList.userListUrl,
+      method: 'GET',
+      success: function(userList) {
+        console.log(userList);
+        // chatList.addAllUsersToDom(userList);
+      },
+      error: function(err) {
+        console.log("ERROR", err);
+      },
+    });
+  },
+
   setWelcomeMsg: function() {
-    $('#welcomeMsg').html("hollabak, " + localStorage.getItem('username') + " !");
+    $('#welcomeMsg').html("hollabak, " + localStorage.getItem('username') + "!");
   },
 
   getNewPost: function() {
@@ -139,9 +158,9 @@ var chatList = {
   addAllPostsToDom: function(chatPostsArr) {
     $('#chatPage').find('ul').html('');
     _.each(chatPostsArr, function(item) {
-      if (item.username) {
+      // if (item.username) {
         $('#chatPage').find('ul').prepend(chatList.createPostStr(item));
-      }
+      // }
     });
   },
 
