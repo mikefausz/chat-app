@@ -6,15 +6,19 @@
     <link rel="stylesheet" href="styles.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
-    <section class="visible" id="loginPage">
+    <img class="frontLogo "src="images/hb1.png" alt="" align=center/>
+    <section class="visible" id="loginPage" style="margin 0 auto" align=center>
       <form id="usernameInput" action="index.html" method="post">
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+        <div id="logIn">
         <input type="text" name="username" placeholder="enter your username"value="">
+        </div>
       </form>
     </section>
     <section id="chatPage">
-      <h2 id="welcomeMsg">hollaback, user</h2>
-      <ul>
+      <h2 id="welcomeMsg">Hello, user</h2>
+      <h3 id="logout">Logout</h3>
+      <ul id="chatPosts">
         <!-- chat posts go here -->
       </ul>
       <form id="newPostInput" action="index.html" method="post">
