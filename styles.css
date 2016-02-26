@@ -8,7 +8,7 @@ section {
 .visible {
   display: block; }
 
-h3, p, {
+h3, p {
   display: inline-block; }
 
 h2  {
