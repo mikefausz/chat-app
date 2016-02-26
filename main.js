@@ -112,7 +112,7 @@ var chatList = {
   },
 
   setWelcomeMsg: function() {
-    $('#welcomeMsg').html("hollabak, " + localStorage.getItem('username') + "!");
+    $('#welcomeMsg').html("Hello, " + localStorage.getItem('username') + "!");
   },
 
   getNewPost: function() {
