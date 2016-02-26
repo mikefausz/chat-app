@@ -1,7 +1,5 @@
 $(document).ready(function() {
   chatList.init();
-  chatList.deletePost("56cf6cc20e33ef0300d98f02");
-  chatList.deletePost("56cf6ca40e33ef0300d98f01");
 });
 
 var templates = {
@@ -27,6 +25,11 @@ var chatList = {
 
   styling: function() {
     chatList.getPostsFromServer();
+    if(localStorage.getItem('username')) {
+      chatList.setWelcomeMsg();
+      $('#loginPage').removeClass('visible');
+      $('#chatPage').addClass('visible');
+    }
   },
 
   events: function() {
@@ -40,24 +43,29 @@ var chatList = {
       $parentSection.next('section').addClass('visible');
       chatList.addUserToList(newUser);
     });
-
     $('#newPostInput').on('submit', function(event) {
       event.preventDefault();
+      console.log("sumbitted");
       var newPostObj = chatList.getNewPost();
       chatList.addPostToServer(newPostObj);
       chatList.getPostsFromServer();
     });
     $('#chatPage').on('click', '.deleteBox', function(event) {
       event.preventDefault();
-      window.glob = $(this);
       var user = $(this).siblings('h3').html();
       if (user === localStorage.getItem('username')) {
         var postId = $(this).data('postid');
         chatList.deletePost(postId);
 
-      }
-
-  });
+      };
+    });
+    $('button.logout').on('click', function(event) {
+      event.preventDefault();
+      chatList.removeUserFromList(localStorage.getItem('username'));
+      $('#loginPage').addClass('visible');
+      $('#chatPage').removeClass('visible');
+    });
+  },
 
   createNewLogin: function(username) {
     var loginTime = new Date();
@@ -70,7 +78,7 @@ var chatList = {
 
   getUsername: function() {
     var username = $('input[name="username"]').val();
-    $('input[name="newTodo"]').val("");
+    $('input[name="username"]').val("");
     localStorage.setItem('username', username);
     return username;
   },
@@ -106,6 +114,7 @@ var chatList = {
       method: 'GET',
       success: function(userList) {
         console.log(userList);
+        // ADD USER LIST TO DOM
         // chatList.addAllUsersToDom(userList);
       },
       error: function(err) {
@@ -149,7 +158,6 @@ var chatList = {
       url: chatList.url,
       method: 'GET',
       success: function(chatPosts) {
-        console.log(chatPosts);
         chatList.addAllPostsToDom(chatPosts);
       },
       error: function(err) {
@@ -159,17 +167,16 @@ var chatList = {
   },
 
   addAllPostsToDom: function(chatPostsArr) {
-    $('#chatPage').find('ul').html('');
+    $('#chatPosts').html('');
     _.each(chatPostsArr, function(item) {
-      // if (item.username) {
-        $('#chatPage').find('ul').prepend(chatList.createPostStr(item));
-      // }
+        $('#chatPosts').prepend(chatList.createPostStr(item));
     });
   },
 
   updatePosts: function() {
     window.setInterval(function(){chatList.getPostsFromServer()}, 2000);
-    // window.setInterval(function(){chatList.updateUserList()}, 2000);
+    // REFRESH USER LIST
+    // window.setInterval(function(){chatList.getUsersFromServer()}, 2000);
   },
 
   createPostStr: function(newPost) {
@@ -184,7 +191,51 @@ var chatList = {
       success: function(response) {
         chatList.getPostsFromServer();
       }
-  });
 
-  }
-};
+    });
+  },
+
+  removeUserFromList: function(username) {
+    $.ajax({
+      url: chatList.userListUrl,
+      method: 'GET',
+      success: function(userList) {
+        var filteredUserArr = _.filter(userList, function(user) {
+          return user.username = username;
+        });
+        var selectedUser = filteredUserArr[0];
+        $.ajax({
+          url: chatList.userListUrl + '/' + selectedUser._id,
+          method: 'DELETE',
+          success: function(response) {
+            chatList.getUsersFromServer();
+          }
+        });
+      },
+      error: function(err) {
+        console.log("ERROR", err);
+      },
+    });
+  },
+
+  clearUsersFromList: function() {
+    $.ajax({
+      url: chatList.userListUrl,
+      method: 'GET',
+      success: function(userList) {
+        _.each(userList, function(user) {
+          $.ajax({
+            url: chatList.userListUrl + '/' + user._id,
+            method: 'DELETE',
+            success: function(response) {
+              chatList.getUsersFromServer();
+            }
+          });
+        });
+      },
+      error: function(err) {
+        console.log("ERROR", err);
+      },
+    });
+  },
+}
