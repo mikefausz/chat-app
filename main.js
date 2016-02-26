@@ -45,6 +45,7 @@ var chatList = {
     });
     $('#newPostInput').on('submit', function(event) {
       event.preventDefault();
+      console.log("sumbitted");
       var newPostObj = chatList.getNewPost();
       chatList.addPostToServer(newPostObj);
       chatList.getPostsFromServer();
@@ -57,7 +58,7 @@ var chatList = {
         chatList.deletePost(postId);
       };
     });
-    $('#logout').on('click', function(event) {
+    $('button.logout').on('click', function(event) {
       event.preventDefault();
       chatList.removeUserFromList(localStorage.getItem('username'));
       $('#loginPage').addClass('visible');
