@@ -8,7 +8,9 @@ var templates = {
   postTempl: [
     "<li id='<%= _id %>'>",
      "<p><%= timestamp %></p>",
+      "<p>",
      "<h3><%= username %></h3>",
+      "<p>",
       "<p><%= text %></p>",
       "<i class='fa fa-times-circle deleteBox' data-postid='<%= _id %>'></i>",
     "</li>"].join("")

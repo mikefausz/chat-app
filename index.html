@@ -6,24 +6,39 @@
     <link rel="stylesheet" href="styles.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
-    <img class="frontLogo "src="images/hb1.png" alt="" align=center/>
+    <div class="wrapper">
+
+
+    <img class="frontLogo" src="images/hb1.png" alt="" align=center/>
     <section class="visible" id="loginPage" style="margin 0 auto" align=center>
       <form id="usernameInput" action="index.html" method="post">
-        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+      <div class="deleteBox">
+      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+      </div>
         <div id="logIn">
-        <input type="text" name="username" placeholder="enter your username"value="">
+        <input type="text" name="username" placeholder="enter your username" value="">
         </div>
       </form>
+
     </section>
     <section id="chatPage">
+      <div class="logoutBox">
       <h2 id="welcomeMsg">Hello, user</h2>
+      <button class="logout" type="submit" name="button">Logout</button>
+      </div>
+      <div class="chatSection">
+
+
       <ul>
         <!-- chat posts go here -->
       </ul>
+      <div class="postBox">
       <form id="newPostInput" action="index.html" method="post">
-        <input type="text" name="newPost" placeholder="enter your chat text"value="">
+      <input class="postInput" type="text" name="newPost" placeholder="enter your chat text" value="">
       </form>
-    </section>
+      </div>
+      </section>
+      </div>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="main.js"></script>
