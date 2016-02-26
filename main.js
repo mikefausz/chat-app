@@ -1,7 +1,5 @@
 $(document).ready(function() {
   chatList.init();
-  chatList.deletePost("56cf6cc20e33ef0300d98f02");
-  chatList.deletePost("56cf6ca40e33ef0300d98f01");
 });
 
 var templates = {
@@ -103,6 +101,7 @@ var chatList = {
       method: 'GET',
       success: function(userList) {
         console.log(userList);
+        // ADD USER LIST TO DOM
         // chatList.addAllUsersToDom(userList);
       },
       error: function(err) {
@@ -158,14 +157,13 @@ var chatList = {
   addAllPostsToDom: function(chatPostsArr) {
     $('#chatPage').find('ul').html('');
     _.each(chatPostsArr, function(item) {
-      // if (item.username) {
         $('#chatPage').find('ul').prepend(chatList.createPostStr(item));
-      // }
     });
   },
 
   updatePosts: function() {
     window.setInterval(function(){chatList.getPostsFromServer()}, 2000);
+    // REFRESH USER LIST
     // window.setInterval(function(){chatList.updateUserList()}, 2000);
   },
 
