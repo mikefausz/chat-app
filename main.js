@@ -54,9 +54,10 @@ var chatList = {
       if (user === localStorage.getItem('username')) {
         var postId = $(this).data('postid');
         chatList.deletePost(postId);
-      };
-    });
-  },
+
+      }
+
+  });
 
   createNewLogin: function(username) {
     var loginTime = new Date();
@@ -183,6 +184,7 @@ var chatList = {
       success: function(response) {
         chatList.getPostsFromServer();
       }
-    });
+  });
+
   }
 };
