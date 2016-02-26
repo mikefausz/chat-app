@@ -14,9 +14,22 @@ var templates = {
     "</li>"].join("")
 };
 
+var users = {
+	url: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
+
+	getValue: "username",
+
+	list: {
+		match: {
+			enabled: true
+		}
+	},
+  theme: "square",
+};
+
 var chatList = {
   url: 'http://tiny-tiny.herokuapp.com/collections/hollabak',
-  userListUrl: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
+    userListUrl: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
 
   init: function() {
     chatList.events();
@@ -50,6 +63,7 @@ var chatList = {
       chatList.addPostToServer(newPostObj);
       chatList.getPostsFromServer();
     });
+    $('#newPostInput').easyAutocomplete(users);
     $('#chatPage').on('click', '.deleteBox', function(event) {
       event.preventDefault();
       var user = $(this).siblings('h3').html();
