@@ -5,31 +5,16 @@ $(document).ready(function() {
 var templates = {
   postTempl: [
     "<li id='<%= _id %>'>",
-     "<p><%= timestamp %></p>",
-      "<p>",
      "<h3><%= username %></h3>",
-      "<p>",
-      "<p><%= text %></p>",
-      "<i class='fa fa-times-circle deleteBox' data-postid='<%= _id %>'></i>",
+     "<span><%= timestamp %></span></br>",
+     "<p><%= text %></p>",
+     "<i class='fa fa-times-circle deleteBox' data-postid='<%= _id %>'></i>",
     "</li>"].join("")
-};
-
-var users = {
-	url: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
-
-	getValue: "username",
-
-	list: {
-		match: {
-			enabled: true
-		}
-	},
-  theme: "square",
 };
 
 var chatList = {
   url: 'http://tiny-tiny.herokuapp.com/collections/hollabak',
-    userListUrl: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
+  userListUrl: 'http://tiny-tiny.herokuapp.com/collections/hollabakUsers',
 
   init: function() {
     chatList.events();
@@ -38,6 +23,7 @@ var chatList = {
 
   styling: function() {
     chatList.getPostsFromServer();
+    chatList.getUsersFromServer();
     if(localStorage.getItem('username')) {
       chatList.setWelcomeMsg();
       $('#loginPage').removeClass('visible');
@@ -58,20 +44,18 @@ var chatList = {
     });
     $('#newPostInput').on('submit', function(event) {
       event.preventDefault();
-      console.log("sumbitted");
+      console.log("submitted");
       var newPostObj = chatList.getNewPost();
       chatList.addPostToServer(newPostObj);
       chatList.getPostsFromServer();
     });
-    $('#newPostInput').easyAutocomplete(users);
     $('#chatPage').on('click', '.deleteBox', function(event) {
       event.preventDefault();
       var user = $(this).siblings('h3').html();
       if (user === localStorage.getItem('username')) {
         var postId = $(this).data('postid');
         chatList.deletePost(postId);
-
-      };
+      }
     });
     $('button.logout').on('click', function(event) {
       event.preventDefault();
@@ -108,18 +92,14 @@ var chatList = {
     });
   },
 
-  removeUserFromList: function(userId) {
+  deleteUser: function(userId) {
     $.ajax({
       url: chatList.userListUrl + '/' + userId,
       method: 'DELETE',
       success: function(response) {
-        console.log("success");
+        console.log("successfully deleted");
       },
     });
-  },
-
-  removeUserFromList: function(username) {
-
   },
 
   getUsersFromServer: function() {
@@ -128,12 +108,18 @@ var chatList = {
       method: 'GET',
       success: function(userList) {
         console.log(userList);
-        // ADD USER LIST TO DOM
-        // chatList.addAllUsersToDom(userList);
+        chatList.addAllUsersToDom(userList);
       },
       error: function(err) {
         console.log("ERROR", err);
       },
+    });
+  },
+
+  addAllUsersToDom: function(userList) {
+    $('aside').find('ul').html('');
+    _.each(userList, function(user) {
+        $('aside').find('ul').append("<li>" + user.username + "</li>");
     });
   },
 
@@ -189,8 +175,7 @@ var chatList = {
 
   updatePosts: function() {
     window.setInterval(function(){chatList.getPostsFromServer()}, 2000);
-    // REFRESH USER LIST
-    // window.setInterval(function(){chatList.getUsersFromServer()}, 2000);
+    window.setInterval(function(){chatList.getUsersFromServer()}, 2000);
   },
 
   createPostStr: function(newPost) {
@@ -205,7 +190,6 @@ var chatList = {
       success: function(response) {
         chatList.getPostsFromServer();
       }
-
     });
   },
 
@@ -215,16 +199,10 @@ var chatList = {
       method: 'GET',
       success: function(userList) {
         var filteredUserArr = _.filter(userList, function(user) {
-          return user.username = username;
+          return user.username === username;
         });
         var selectedUser = filteredUserArr[0];
-        $.ajax({
-          url: chatList.userListUrl + '/' + selectedUser._id,
-          method: 'DELETE',
-          success: function(response) {
-            chatList.getUsersFromServer();
-          }
-        });
+        chatList.deleteUser(selectedUser._id);
       },
       error: function(err) {
         console.log("ERROR", err);
@@ -252,4 +230,4 @@ var chatList = {
       },
     });
   },
-}
+};
