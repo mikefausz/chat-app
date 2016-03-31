@@ -36,11 +36,11 @@ After completing this assignment, you be able to effectively use
 * A user may only delete their own messages.
 * A user cannot edit any chat messages.
 * You will have access to : http://tiny-tiny.herokuapp.com/collections/<collectionName> to use for your GET, PUT, POST, DELETE methods, and this server works as follows:
-⋅⋅⋅/collections/<collectionName>     // GET
-⋅⋅⋅/collections/<collectionName>     // POST
-⋅⋅⋅/collections/<collectionName>/:id // GET
-⋅⋅⋅/collections/<collectionName>/:id // PUT
-⋅⋅⋅/collections/<collectionName>/:id // DELETE
+/collections/<collectionName>     // GET
+/collections/<collectionName>     // POST
+/collections/<collectionName>/:id // GET
+/collections/<collectionName>/:id // PUT
+/collections/<collectionName>/:id // DELETE
 
 ###Explorer Mode
 Like described in the requirements section, you will be creating an online chat application that can host multiple users that have unique usernames/handles.
